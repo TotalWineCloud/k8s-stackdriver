@@ -1,0 +1,27 @@
+steps:
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: Deploy Custom Metrics Adapter
+  entrypoint: /bin/bash
+  args:
+  - '-c'
+  - |
+
+    printf "\n[x] Fetching cluster credentils for %s" "${_CLUSTER_NAME}"
+    if ! gcloud container clusters get-credentials --zone "${_CLUSTER_ZONE}" "${_CLUSTER_NAME}"
+    then
+        printf "\n[x] get-credentials failed."
+        exit 1
+    fi
+
+    printf "\n[x] Deploying legacy resource model adapter..."
+    if ! kubectl apply -f custom-metrics-stackdriver-adapter/deploy/production/adapter.yaml    
+    then
+        printf "\n[x] Failed to deploy adapter."
+        exit 1
+    fi
+
+timeout: 1800s
+substitutions:
+    _CLUSTER_ZONE: 'us-east1-b'
+    _CLUSTER_NAME: ''
