@@ -15,7 +15,7 @@ steps:
     fi
 
     printf "\n[x] Deploying legacy resource model adapter..."
-    if ! kubectl delete -f custom-metrics-stackdriver-adapter/deploy/production/adapter.yaml    
+    if ! kubectl apply -f custom-metrics-stackdriver-adapter/deploy/production/adapter.yaml    
     then
         printf "\n[x] Failed to deploy adapter."
         exit 1
